@@ -29,6 +29,6 @@ jobs:
           TOTAL=$(jq '.numTotalTests' results.json)
 
           # 2. Send to OkAI Platform (Replace with your Vercel/Ngrok URL)
-          curl -X POST https://YOUR-VERCEL-APP.vercel.app/api/webhook/score \
+          curl -X POST https://okai-platform.vercel.app/api/webhook/score \
           -H "Content-Type: application/json" \
           -d "{\"github_handle\": \"$GITHUB_ACTOR\", \"repo_url\": \"$GITHUB_REPOSITORY\", \"tests_passed\": $PASSED, \"total_tests\": $TOTAL}"
