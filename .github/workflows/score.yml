@@ -19,7 +19,7 @@ jobs:
         id: test_step
         # We continue on error so we can report failures (0/5) instead of crashing
         continue-on-error: true
-        run: npm test -- --json --outputFile=results.json
+        run: npm test
 
       - name: Report Score
         if: always() # Run this even if they fail the test
