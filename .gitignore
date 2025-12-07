@@ -1,0 +1,10 @@
+node_modules
+results.json
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+Thumbs.db

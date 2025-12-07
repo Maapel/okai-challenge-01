@@ -1,0 +1,34 @@
+name: The Judge
+on: [push]
+
+jobs:
+  score:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests (The Race)
+        id: test_step
+        # We continue on error so we can report failures (0/5) instead of crashing
+        continue-on-error: true
+        run: npm test -- --json --outputFile=results.json
+
+      - name: Report Score
+        if: always() # Run this even if they fail the test
+        run: |
+          # 1. Read the JSON results
+          PASSED=$(jq '.numPassedTests' results.json)
+          TOTAL=$(jq '.numTotalTests' results.json)
+
+          # 2. Send to OkAI Platform (Replace with your Vercel/Ngrok URL)
+          curl -X POST https://YOUR-VERCEL-APP.vercel.app/api/webhook/score \
+          -H "Content-Type: application/json" \
+          -d "{\"github_handle\": \"$GITHUB_ACTOR\", \"repo_url\": \"$GITHUB_REPOSITORY\", \"tests_passed\": $PASSED, \"total_tests\": $TOTAL}"
